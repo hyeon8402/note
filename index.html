@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>태그 노트 계층형 (보안 통과 완결판)</title>
+  <title>태그 노트 계층형 (최종 완결판)</title>
   <style>
     :root {
       --bg:#101010;
       --header:#1b1b1b;
       --card:#171717;
-      --card2:#202020;
       --input:#141414;
       --text:#f5f5f5;
       --sub:#b6b6b6;
       --line:#3a3a3a;
       --main:#2563eb;
       --danger:#dc2626;
-      --star:#f59e0b;
       --ok:#16a34a;
-      --edit:#7c3aed;
     }
 
     * { box-sizing:border-box; }
@@ -27,8 +24,8 @@
       margin:0;
       background:var(--bg);
       color:var(--text);
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      padding-bottom:150px;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+      padding-bottom:120px;
       -webkit-tap-highlight-color:transparent;
     }
 
@@ -36,104 +33,72 @@
       background:var(--header);
       padding:18px 16px;
       border-bottom:1px solid #242424;
-      position:sticky;
-      top:0;
-      z-index:10;
     }
 
-    .titleRow { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    h1 { font-size:23px; margin:0; display:flex; align-items:center; gap:8px; }
+    .titleRow { display:flex; align-items:center; justify-content:space-between; }
+    h1 { font-size:22px; margin:0; }
     h2 { margin:0 0 12px; font-size:19px; }
-    .moon { font-size:24px; opacity:.85; }
-    main { max-width:900px; margin:0 auto; padding:18px 12px 0; }
-    .card { background:var(--card); border:1px solid var(--line); border-radius:22px; padding:14px; margin:12px 0; }
-    .desc { color:var(--sub); margin:5px 0 0; font-size:14px; line-height:1.5; }
 
-    input, select, textarea, button, label.fileBtn { width:100%; border:1px solid var(--line); border-radius:14px; padding:13px; font-size:16px; }
-    input, select, textarea { background:var(--input); color:var(--text); outline:none; margin-bottom:9px; }
-    textarea { min-height:150px; resize:vertical; }
-    input:focus, select:focus, textarea:focus { border-color:var(--main); }
-    button, label.fileBtn { background:var(--main); color:white; border:0; font-weight:800; margin:4px 0; display:block; text-align:center; }
+    main { max-width:900px; margin:0 auto; padding:12px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:22px; padding:16px; margin:12px 0; }
+    .desc { color:var(--sub); margin:5px 0; font-size:14px; line-height:1.5; }
 
-    .searchBox { border:2px solid #5a5a5a; border-radius:22px; padding:8px 10px; position:relative; background:var(--input); margin-bottom:18px; }
-    .searchLabel { color:var(--sub); font-size:14px; padding:0 6px 3px; }
-    .searchBox input { border:0; background:transparent; margin:0; padding:6px 44px 8px 6px; font-size:20px; font-weight:700; }
-    .clearSearchBtn { position:absolute; right:12px; top:50%; transform:translateY(-50%); width:34px; height:34px; padding:0; margin:0; border-radius:50%; background:#333; color:#fff; display:none; align-items:center; justify-content:center; font-size:22px; line-height:1; border:1px solid #555; }
-    .clearSearchBtn.show { display:flex; }
+    input, select, textarea, button { width:100%; border:1px solid var(--line); border-radius:14px; padding:13px; font-size:16px; background:var(--input); color:var(--text); outline:none; margin-bottom:10px; }
+    button { background:var(--main); color:white; border:0; font-weight:800; margin:4px 0; cursor:pointer; }
 
-    .selectBlock { background:#151515; border-radius:20px; padding:12px; margin-top:12px; }
-    .selectBlock label { display:block; color:#d1d1d1; font-size:14px; margin:0 0 4px 4px; }
-    .selectBlock select { background:#3a3a3a; border:0; font-weight:800; font-size:18px; padding:10px 8px; margin:0; }
-    .compactSelectBlock { margin-top:0; margin-bottom:9px; }
-    .modalSelectBtn { background:#3a3a3a; border:1px solid #4a4a4a; color:#fff; font-weight:900; font-size:18px; padding:12px 42px 12px 12px; margin:0; text-align:left; position:relative; }
-    .modalSelectBtn::after { content:"⌄"; position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#d0d0d0; font-size:20px; }
+    .searchBox { border:2px solid #5a5a5a; border-radius:22px; padding:6px 12px; position:relative; background:var(--input); margin-bottom:14px; }
+    .searchLabel { color:var(--sub); font-size:12px; }
+    .searchBox input { border:0; background:transparent; margin:0; padding:4px 0; font-size:18px; font-weight:700; }
+    .clearSearchBtn { position:absolute; right:12px; top:50%; transform:translateY(-50%); width:30px; height:30px; border-radius:50%; background:#333; color:#fff; border:0; display:none; font-size:18px; }
 
+    .selectBlock { background:#151515; border-radius:20px; padding:12px; margin-top:10px; }
+    .selectBlock label { display:block; color:#d1d1d1; font-size:13px; margin-bottom:6px; }
+    
+    .modalSelectBtn { background:#3a3a3a; border:1px solid #4a4a4a; color:#fff; font-weight:800; text-align:left; position:relative; }
+    .modalSelectBtn::after { content:"⌄"; position:absolute; right:15px; top:50%; transform:translateY(-50%); font-size:16px; }
+
+    /* 📥 아래로 스르륵 펼쳐지는 유기적인 모션 드롭다운 박스 */
     .inlineDropdown {
-      max-height: 0; overflow: hidden; opacity: 0; background: #161616; border: 1px solid transparent; border-radius: 16px; padding: 0 10px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
-      transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, padding 0.28s ease, margin 0.28s ease;
+      max-height: 0; overflow: hidden; opacity: 0; background: #161616; border: 1px solid transparent; border-radius: 16px; padding: 0 10px;
+      transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, padding 0.28s ease;
     }
-    .inlineDropdown.show { max-height: 320px; overflow-y: auto; opacity: 1; border-color: #3a3a3a; padding: 8px 10px; margin-top: 6px; margin-bottom: 12px; }
+    .inlineDropdown.show { max-height: 280px; overflow-y: auto; opacity: 1; border-color: #3a3a3a; padding: 8px 10px; margin-top: 4px; }
 
-    .modalOptionBtn { display:flex; align-items:center; justify-content:space-between; width:100%; background:#232323; border:1px solid #3a3a3a; border-radius:16px; padding:13px 14px; margin:7px 0; color:#fff; font-size:17px; font-weight:850; text-align:left; }
-    .modalOptionBtn.active { background:#12337e; border-color:#4f83ff; }
-    .modalOptionBtn .checkMark { color:#9fc0ff; font-weight:900; margin-left:10px; }
-    .selectHelp { color:#cfcfcf; font-size:14px; margin:8px 4px 0; line-height:1.45; }
+    .modalOptionBtn { display:block; width:100%; background:#232323; border:1px solid #3a3a3a; border-radius:12px; padding:11px; margin:5px 0; color:#fff; font-size:15px; text-align:left; }
 
     .countBox { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
     .countItem { background:#0d0d0d; border:1px solid var(--line); border-radius:16px; padding:10px; text-align:center; }
-    .countNum { font-weight:900; font-size:20px; }
-    .countLabel { font-size:12px; color:var(--sub); margin-top:2px; }
+    .countNum { font-weight:900; font-size:18px; }
+    .countLabel { font-size:11px; color:var(--sub); }
 
-    .tag { background:#101010; border:1px solid var(--line); border-radius:18px; padding:14px; margin:10px 0; transition:.12s; }
-    .tag.selected { background:linear-gradient(180deg, #12337e, #0e1d47); border-color:#4f83ff; box-shadow:0 0 0 2px rgba(37,99,235,.18) inset; }
-    .tag.suspect { border-color:#f59e0b; box-shadow:0 0 0 2px rgba(245,158,11,.12) inset; }
-    .suspectBox { margin-top:8px; background:#3b2605; border:1px solid #9a6a12; color:#ffe7aa; border-radius:14px; padding:9px 10px; font-size:13px; line-height:1.45; font-weight:800; }
-    .tagName { font-size:19px; font-weight:900; word-break:break-word; }
-    .tagPath { margin-top:8px; color:#bcbcbc; font-size:14px; line-height:1.45; font-weight:700; }
-    .tagDesc { margin-top:8px; color:#e3e3e3; font-size:15px; line-height:1.55; }
-    .tagKeywords { margin-top:8px; color:#aaa; font-size:14px; line-height:1.45; }
-    .tagBtns { display:grid; grid-template-columns:1fr 54px 54px 54px; gap:8px; margin-top:12px; }
-    .tagBtns button { padding:10px 6px; margin:0; font-size:14px; }
+    .tag { background:#101010; border:1px solid var(--line); border-radius:18px; padding:14px; margin:10px 0; }
+    .tag.selected { background:linear-gradient(180deg, #12337e, #0e1d47); border-color:#4f83ff; }
+    .tagName { font-size:17px; font-weight:800; }
+    .tagPath { font-size:13px; color:var(--sub); margin-top:4px; }
+    .tagDesc { margin-top:8px; color:#e3e3e3; font-size:14px; }
+    .tagBtns { display:grid; grid-template-columns:1fr 54px 54px; gap:8px; margin-top:12px; }
+    .tagBtns button { padding:8px; margin:0; font-size:13px; }
 
-    .copyBtn { background:var(--main); }
-    .edit { background:var(--edit); }
-    .selectBtn { background:var(--star); color:#111; }
-    .del { background:var(--danger); }
-
-    .editBox {
-      max-height: 0; overflow: hidden; opacity: 0; background: #171717; border: 1px solid transparent; border-radius: 16px; padding: 0 12px; margin-top: 0;
-      transition: max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, padding 0.32s ease, margin 0.32s ease;
-    }
-    .editBox.active { max-height: 620px; opacity: 1; border-color: var(--line); padding: 12px; margin-top: 12px; }
-    .editActions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-    .ok { background:var(--ok); }
-    .danger { background:var(--danger); }
-    .ghost { background:#262626; border:1px solid var(--line); color:#fff; }
-
-    nav { position:fixed; left:0; right:0; bottom:0; z-index:20; background:#111; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(5,1fr); gap:5px; padding:8px; }
-    nav button { margin:0; background:#303030; border:1px solid #444; border-radius:14px; padding:11px 2px; font-size:13px; }
+    nav { position:fixed; left:0; right:0; bottom:0; z-index:20; background:#111; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(4,1fr); gap:4px; padding:8px; }
+    nav button { margin:0; background:#252525; border:1px solid #333; border-radius:12px; padding:12px 2px; font-size:14px; color:#fff; }
     nav button.active { background:var(--main); }
 
-    .selectionBar { position:fixed; left:8px; right:8px; bottom:69px; z-index:25; background:#0a0a0a; border:1px solid #4a4a4a; border-radius:18px; padding:8px; display:none; grid-template-columns:1fr 1fr 1fr; gap:7px; box-shadow:0 10px 28px rgba(0,0,0,.5); }
+    .selectionBar { position:fixed; left:8px; right:8px; bottom:69px; z-index:25; background:#0a0a0a; border:1px solid #4a4a4a; border-radius:18px; padding:8px; display:none; grid-template-columns:1fr 1fr 1fr; gap:6px; }
     .selectionBar.show { display:grid; }
-    .selectionBar button { margin:0; padding:10px 6px; border-radius:12px; font-size:14px; }
-    .selectionCount { grid-column:1 / -1; color:#fff; text-align:center; font-weight:900; padding:3px 0 5px; }
+    .selectionBar button { margin:0; padding:10px; font-size:13px; }
+    .selectionCount { grid-column:1 / -1; color:#fff; text-align:center; font-weight:700; padding:2px 0; font-size:13px; }
 
     .page { display:none; }
     .page.active { display:block; }
-    .toast { position:fixed; left:50%; bottom:138px; transform:translateX(-50%); background:#f5f5f5; color:#050505; padding:10px 14px; border-radius:999px; opacity:0; transition:.2s; z-index:30; white-space:nowrap; font-weight:900; max-width:92vw; overflow:hidden; text-overflow:ellipsis; }
+    .toast { position:fixed; left:50%; bottom:138px; transform:translateX(-50%); background:#f5f5f5; color:#050505; padding:10px 16px; border-radius:999px; opacity:0; transition:.2s; z-index:30; font-weight:900; font-size:14px; }
     .toast.show { opacity:1; }
-    .hideFile { display:none; }
-    .miniHelp { background:#0c0c0c; border:1px solid var(--line); border-radius:16px; padding:11px; margin-top:10px; color:var(--sub); line-height:1.5; font-size:14px; }
-
-    @media (min-width:760px) { #tagList { display:grid; grid-template-columns:1fr 1fr; gap:10px; } .tag { margin:0; } }
   </style>
 </head>
 <body>
+
 <header>
   <div class="titleRow">
-    <h1>🛠️ 태그 노트</h1>
-    <div class="moon">🌙</div>
+    <h1>🛠️ 태그 노트 대시보드</h1>
   </div>
 </header>
 
@@ -141,143 +106,132 @@
   <section id="pageSearch" class="page active">
     <div class="card">
       <div class="searchBox">
-        <div class="searchLabel">태그 검색</div>
-        <input id="searchInput" placeholder="검색어를 입력하세요..." />
-        <button id="clearSearchBtn" class="clearSearchBtn" type="button">×</button>
+        <div class="searchLabel">검색어 필터링</div>
+        <input id="searchInput" placeholder="찾으실 태그를 입력하세요..." />
+        <button id="clearSearchBtn" type="button">×</button>
       </div>
       <div class="selectBlock">
-        <label>대분류</label>
+        <label>대분류 대분류 선택</label>
         <button id="mainCategorySelectBtn" class="modalSelectBtn" type="button">전체</button>
-        <select id="mainCategorySelect" style="display:none"></select>
+        <div id="dropdownMain" class="inlineDropdown"></div>
       </div>
-      <div id="mainHelp" class="selectHelp"></div>
       <div class="selectBlock">
-        <label>소분류</label>
+        <label>소분류 소분류 선택</label>
         <button id="subCategorySelectBtn" class="modalSelectBtn" type="button">전체</button>
-        <select id="subCategorySelect" style="display:none"></select>
+        <div id="dropdownSub" class="inlineDropdown"></div>
       </div>
       <div class="countBox">
-        <div class="countItem"><div id="totalCount" class="countNum">0</div><div class="countLabel">전체</div></div>
-        <div class="countItem"><div id="shownCount" class="countNum">0</div><div class="countLabel">표시</div></div>
-        <div class="countItem"><div class="countNum">DB</div><div class="countLabel">IndexedDB</div></div>
+        <div class="countItem"><div id="totalCount" class="countNum">0</div><div class="countLabel">전체 보관</div></div>
+        <div class="countItem"><div id="shownCount" class="countNum">0</div><div class="countLabel">조건 일치</div></div>
+        <div class="countItem"><div class="countNum" style="color:var(--ok)">OK</div><div class="countLabel">구동 엔진</div></div>
       </div>
     </div>
-    <div class="card"><div id="tagList"></div></div>
+    <div id="tagList"></div>
   </section>
 
   <section id="pageAdd" class="page">
     <div class="card">
-      <h2>태그 추가</h2>
-      <input id="tagInput" placeholder="태그 예: sitting" />
-      <input id="krInput" placeholder="한글 이름 예: 앉아있음" />
-      <div class="selectBlock compactSelectBlock">
-        <label>대분류</label>
-        <button id="addMainCategoryBtn" class="modalSelectBtn" type="button">이미지 구성</button>
-        <select id="addMainCategory" style="display:none"></select>
-      </div>
-      <div class="selectBlock compactSelectBlock">
-        <label>소분류</label>
-        <button id="addSubCategoryBtn" class="modalSelectBtn" type="button">품질 및 해상도</button>
-        <select id="addSubCategory" style="display:none"></select>
-      </div>
-      <textarea id="descInput" placeholder="설명"></textarea>
-      <input id="keywordsInput" placeholder="키워드" />
-      <button id="saveTagBtn">저장</button>
+      <h2>새로운 태그 등록</h2>
+      <input id="tagInput" placeholder="영문 태그 명칭 (예: sitting)" />
+      <input id="krInput" placeholder="한글 식별 명칭 (예: 앉아있음)" />
+      <textarea id="descInput" placeholder="상세 설명을 기입하세요..." style="min-height:100px;"></textarea>
+      <button id="saveTagBtn">기기 데이터베이스에 저장</button>
     </div>
   </section>
 
   <section id="pageBulk" class="page">
     <div class="card">
-      <h2>대량 추가</h2>
-      <textarea id="bulkText" placeholder="tag : (한글명) 설명 구조로 입력..."></textarea>
-      <button id="bulkAddBtn" class="ok">대량 저장</button>
+      <h2>대량 일괄 서치 등록</h2>
+      <p class="desc">여러 줄을 한 번에 복사해서 넣을 수 있는 창고입니다.</p>
+      <textarea id="bulkText" placeholder="sitting : 앉아있음&#10;standing : 서있음" style="min-height:200px;"></textarea>
+      <button id="bulkAddBtn" style="background:var(--ok)">대량 추출 시작</button>
     </div>
   </section>
 
   <section id="pageBackup" class="page">
     <div class="card">
-      <h2>로컬 백업 / 복원</h2>
-      <button id="exportBtn">JSON 백업 저장</button>
-      <label class="fileBtn">JSON 불러오기<input id="importFile" class="hideFile" type="file" accept=".json"></label>
-      <button id="resetBtn" class="danger">전체 삭제</button>
+      <h2>💾 로컬 기기 백업 파일 관리</h2>
+      <button id="exportBtn" style="background:#222; border:1px solid #444;">수동 JSON 백업 내보내기</button>
+      <button id="resetBtn" class="danger" style="margin-top:8px;">기기 데이터 전체 초기화</button>
     </div>
 
     <div class="card">
-      <h2>☁️ 실시간 클라우드 동기화 설정</h2>
-      <p class="desc">인터넷 창고 보안을 위해, 아래에 열쇠 정보를 딱 한 번만 입력해 주세요. (폰 메모리에만 보관됩니다)</p>
-      <input id="cfgToken" type="password" placeholder="GitHub 토큰 (ghp_...) 입력" style="margin-top:10px;" />
-      <input id="cfgGistId" placeholder="Gist ID 입력" />
-      <button id="saveCfgBtn" class="ok" style="background:#16a34a;">🔑 주소 및 열쇠 내 폰에 기억시키기</button>
-      <div class="editActions" style="margin-top:16px; border-top:1px solid #333; padding-top:12px;">
-        <button id="cloudUploadBtn" class="ok" style="margin-top:5px;">클라우드로 업로드</button>
-        <button id="cloudDownloadBtn" class="copyBtn">클라우드에서 불러오기</button>
+      <h2>☁️ 1인 원클릭 클라우드 원격 동기화</h2>
+      <p class="desc">내 스마트폰 메모리 보안 공간에 열쇠를 보관하며 깃허브 무선 통신을 연결합니다.</p>
+      <input id="cfgToken" type="password" placeholder="GitHub 개인 보안 토큰 (ghp_...) 입력" style="margin-top:8px;" />
+      <input id="cfgGistId" placeholder="고유 Gist ID 코드 입력" />
+      <button id="saveCfgBtn" style="background:var(--ok); font-weight:bold;">🔑 보안 키 정보 내 폰에 각인하기</button>
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; border-top:1px solid #333; padding-top:14px;">
+        <button id="cloudUploadBtn">클라우드로 업로드</button>
+        <button id="cloudDownloadBtn" style="background:#555;">원격 백업 불러오기</button>
       </div>
     </div>
   </section>
 </main>
 
 <div id="selectionBar" class="selectionBar">
-  <div id="selectionCount" class="selectionCount">선택 0개</div>
-  <button id="copySelectedBtn">선택 복사</button>
-  <button id="copySelectedLineBtn">줄복사</button>
-  <button id="clearSelectedBtn" class="ghost">해제</button>
+  <div id="selectionCount" class="selectionCount">선택된 항목 0개</div>
+  <button id="copySelectedBtn">쉼표 복사</button>
+  <button id="copySelectedLineBtn">줄바꿈 복사</button>
+  <button id="clearSelectedBtn" style="background:#333;">선택 취소</button>
 </div>
 
 <nav>
-  <button class="nav active" data-page="pageSearch">검색</button>
-  <button class="nav" data-page="pageAdd">추가</button>
-  <button class="nav" data-page="pageBulk">대량</button>
-  <button class="nav" data-page="pageBackup">백업</button>
+  <button class="nav active" data-page="pageSearch">필터검색</button>
+  <button class="nav" data-page="pageAdd">개별등록</button>
+  <button class="nav" data-page="pageBulk">대량추출</button>
+  <button class="nav" data-page="pageBackup">동기설정</button>
 </nav>
+
 <div id="toast" class="toast"></div>
 
 <script>
-let db, allTags = [], activeMain = "전체", activeSub = "전체", selectedTags = new Set(), modalPicker = null, editModalContext = null;
-const $ = id => document.getElementById(id);
-
+// 🛠️ 대시보드 엔진 핵심 영구 메모리 변수 가동
+const DB_NAME = "tag_note_indexeddb_v3_core";
+const STORE_NAME = "dataset";
 const CATEGORY_TREE = {
-  "전체": { "subs": ["전체"] },
-  "이미지 구성": { "subs": ["전체", "품질 및 해상도", "출처 표시", "이미지 형식", "아트 스타일", "색상 및 톤", "구도 및 앵글", "기타"] },
-  "인물": { "subs": ["전체", "인원수 및 관계", "신체적 특징", "헤어스타일 및 색상", "눈 특징", "기타"] },
-  "복장 및 악세서리": { "subs": ["전체", "셔츠 및 상의", "바지 및 하의", "드레스", "액세서리", "기타"] },
-  "기타": { "subs": ["전체", "기타"] }
+  "전체": ["전체"],
+  "이미지 구성": ["전체", "품질 및 해상도", "출처 표시", "이미지 형식", "아트 스타일", "기타"],
+  "인물 특징": ["전체", "신체적 특징", "헤어스타일", "눈 모양", "복장 장식", "기타"],
+  "배경 요소": ["전체", "자연 환경", "실내외 구도", "시간 날씨", "기타"]
 };
+
+let db, allTags = [], activeMain = "전체", activeSub = "전체", selectedTags = new Set();
+const $ = id => document.getElementById(id);
 
 window.addEventListener("DOMContentLoaded", async () => {
   db = await openDB();
   await refreshAll();
-  initCategorySelects();
+  initCategoryMenu();
 
-  if(localStorage.getItem("local_cloud_token")) $("cfgToken").value = localStorage.getItem("local_cloud_token");
-  if(localStorage.getItem("local_cloud_gist_id")) $("cfgGistId").value = localStorage.getItem("local_cloud_gist_id");
+  // 폰 로컬 메모리에 기억되어 있던 열쇠값 자동 로드
+  if(localStorage.getItem("storage_token")) $("cfgToken").value = localStorage.getItem("storage_token");
+  if(localStorage.getItem("storage_gist")) $("cfgGistId").value = localStorage.getItem("storage_gist");
 
   $("saveCfgBtn").onclick = () => {
-    localStorage.setItem("local_cloud_token", $("cfgToken").value.trim());
-    localStorage.setItem("local_cloud_gist_id", $("cfgGId") ? $("cfgGId").value.trim() : $("cfgGistId").value.trim());
-    toast("🔑 열쇠 정보를 내 폰에 안전하게 저장했습니다!");
+    localStorage.setItem("storage_token", $("cfgToken").value.trim());
+    localStorage.setItem("storage_gist", $("cfgGistId").value.trim());
+    toast("🔑 동기화 암호 열쇠를 내 디바이스에 잠금 저장했습니다!");
   };
 
-  $("mainCategorySelect").onchange = () => { activeMain = $("mainCategorySelect").value; activeSub = "전체"; updateSubSelect(); render(); };
-  $("subCategorySelect").onchange = () => { activeSub = $("subCategorySelect").value; render(); };
-  $("mainCategorySelectBtn").onclick = () => openCategoryModal("searchMain");
-  $("subCategorySelectBtn").onclick = () => openCategoryModal("searchSub");
-  $("addMainCategoryBtn").onclick = () => openCategoryModal("addMain");
-  $("addSubCategoryBtn").onclick = () => openCategoryModal("addSub");
+  $("mainCategorySelectBtn").onclick = () => toggleDropdown("Main");
+  $("subCategorySelectBtn").onclick = () => toggleDropdown("Sub");
 
   $("searchInput").oninput = () => { $("clearSearchBtn").style.display = $("searchInput").value ? "block" : "none"; render(); };
   $("clearSearchBtn").onclick = () => { $("searchInput").value = ""; $("clearSearchBtn").style.display = "none"; render(); };
-  
-  $("saveTagBtn").onclick = addTag;
-  $("bulkAddBtn").onclick = bulkAdd;
-  $("exportBtn").onclick = exportJson;
-  $("importFile").onchange = importJson;
-  $("resetBtn").onclick = resetAll;
-  $("cloudUploadBtn").onclick = uploadToCloud;
-  $("cloudDownloadBtn").onclick = downloadFromCloud;
 
-  $("copySelectedBtn").onclick = () => copySelected(", ");
-  $("copySelectedLineBtn").onclick = () => copySelected("\n");
-  $("clearSelectedBtn").onclick = clearSelected;
+  $("saveTagBtn").onclick = addSingleTag;
+  $("bulkAddBtn").onclick = addBulkTags;
+  $("exportBtn").onclick = exportLocalJson;
+  $("resetBtn").onclick = resetLocalDatabase;
+  
+  $("cloudUploadBtn").onclick = uploadToGist;
+  $("cloudDownloadBtn").onclick = downloadFromGist;
+
+  $("copySelectedBtn").onclick = () => copyMultipleText(", ");
+  $("copySelectedLineBtn").onclick = () => copyMultipleText("\n");
+  $("clearSelectedBtn").onclick = () => { selectedTags.clear(); updateSelectionUi(); render(); };
 
   document.querySelectorAll(".nav").forEach(btn => {
     btn.onclick = () => {
@@ -285,19 +239,18 @@ window.addEventListener("DOMContentLoaded", async () => {
       btn.classList.add("active");
       document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
       $(btn.dataset.page).classList.add("active");
+      closeAllDropdowns();
     };
   });
+
   render();
 });
 
 function openDB() {
-  return new Promise((res) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = e => {
-      const d = e.target.result;
-      if (!d.objectStoreNames.contains(STORE_NAME)) d.createObjectStore(STORE_NAME, { keyPath:"tag" });
-    };
-    req.onsuccess = () => res(req.result);
+  return new Promise(resolve => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onupgradeneeded = e => { e.target.result.createObjectStore(STORE_NAME, { keyPath:"tag" }); };
+    request.onsuccess = () => resolve(request.result);
   });
 }
 
@@ -306,130 +259,140 @@ async function refreshAll() {
   allTags = await new Promise(res => { const r = store.getAll(); r.onsuccess = () => res(r.result || []); });
 }
 
-async function uploadToCloud() {
-  const token = localStorage.getItem("local_cloud_token");
-  const gistId = localStorage.getItem("local_cloud_gist_id");
-  if (!token || !gistId) return toast("먼저 아래에 주소와 열쇠를 입력하고 저장해 주세요.");
-  toast("☁️ 동기화 데이터 전송 중...");
+function initCategoryMenu() {
+  const mainDiv = $("dropdownMain"); mainDiv.innerHTML = "";
+  Object.keys(CATEGORY_TREE).forEach(m => {
+    const btn = document.createElement("button"); btn.className = "modalOptionBtn"; btn.textContent = m;
+    btn.onclick = () => { activeMain = m; activeSub = "전체"; $("mainCategorySelectBtn").textContent = m; buildSubDropdown(); mainDiv.classList.remove("show"); render(); };
+    mainDiv.appendChild(btn);
+  });
+  buildSubDropdown();
+}
+
+function buildSubDropdown() {
+  const subDiv = $("dropdownSub"); subDiv.innerHTML = "";
+  const subList = CATEGORY_TREE[activeMain] || ["전체"];
+  $("subCategorySelectBtn").textContent = activeSub;
+  subList.forEach(s => {
+    const btn = document.createElement("button"); btn.className = "modalOptionBtn"; btn.textContent = s;
+    btn.onclick = () => { activeSub = s; $("subCategorySelectBtn").textContent = s; subDiv.classList.remove("show"); render(); };
+    subDiv.appendChild(btn);
+  });
+}
+
+function toggleDropdown(type) {
+  const target = $("dropdown" + type);
+  const isShow = target.classList.contains("show");
+  closeAllDropdowns();
+  if(!isShow) target.classList.add("show");
+}
+
+function closeAllDropdowns() { $("dropdownMain").classList.remove("show"); $("dropdownSub").classList.remove("show"); }
+
+async function addSingleTag() {
+  const tag = $("tagInput").value.replace(/_/g, " ").trim();
+  if(!tag) return toast("⚠️ 영문 명칭은 필수 입력값입니다.");
+  const item = { tag, kr: $("krInput").value.trim(), mainCategory: "기타", subCategory: "기타", desc: $("descInput").value.trim() };
+  const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).put(item);
+  await refreshAll();
+  $("tagInput").value = ""; $("krInput").value = ""; $("descInput").value = "";
+  toast("✅ 태그 데이터베이스 저장 완료!"); render();
+}
+
+async function addBulkTags() {
+  const text = $("bulkText").value.trim(); if(!text) return toast("⚠️ 입력된 데이터가 없습니다.");
+  const tx = db.transaction(STORE_NAME, "readwrite"); const store = tx.objectStore(STORE_NAME);
+  text.split("\n").forEach(line => {
+    const parts = line.split(":"); if(parts.length < 2) return;
+    const tag = parts[0].replace(/_/g, " ").trim(); const kr = parts[1].replace(/[\(\)]/g, "").trim();
+    if(tag) store.put({ tag, kr, mainCategory:"기타", subCategory:"기타", desc:"" });
+  });
+  await refreshAll(); $("bulkText").value = ""; toast("🚀 대량 일괄 추출 저장 완료!"); render();
+}
+
+function render() {
+  const q = $("searchInput").value.trim().toLowerCase();
+  const list = allTags.filter(t => {
+    const matchSearch = q ? `${t.tag} ${t.kr} ${t.desc}`.toLowerCase().includes(q) : true;
+    const matchMain = activeMain === "전체" || t.mainCategory === activeMain;
+    const matchSub = activeSub === "전체" || t.subCategory === activeSub;
+    return matchSearch && matchMain && matchSub;
+  });
+
+  $("totalCount").textContent = allTags.length;
+  $("shownCount").textContent = Math.min(list.length, DISPLAY_LIMIT);
+  
+  const container = $("tagList"); container.innerHTML = "";
+  if(list.length === 0) { container.innerHTML = "<p class='desc' style='text-align:center;'>조회 결과가 비어있습니다.</p>"; return; }
+
+  list.slice(0, DISPLAY_LIMIT).forEach(t => {
+    const div = document.createElement("div"); div.className = "tag";
+    if(selectedTags.has(t.tag)) div.classList.add("selected");
+    div.innerHTML = `
+      <div class="tagName">${esc(t.kr || t.tag)} (${esc(t.tag)})</div>
+      <div class="tagDesc">${esc(t.desc || "상세 속성 정보 없음")}</div>
+      <div class="tagBtns">
+        <button class="copyBtn" style="background:var(--main)">단일복사</button>
+        <button class="selectBtn" style="background:#333; border:1px solid #555;">${selectedTags.has(t.tag)?"✓ 담김":"＋ 담기"}</button>
+        <button class="delBtn" style="background:var(--danger)">삭제</button>
+      </div>
+    `;
+    div.querySelector(".copyBtn").onclick = () => { systemCopy(t.tag); toast(`📋 복사됨: ${t.tag}`); };
+    div.querySelector(".selectBtn").onclick = () => { if(selectedTags.has(t.tag)) selectedTags.delete(t.tag); else selectedTags.add(t.tag); updateSelectionUi(); render(); };
+    div.querySelector(".delBtn").onclick = async () => { if(!confirm("해당 데이터를 영구 삭제할까요?")) return; const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).delete(t.tag); await refreshAll(); render(); };
+    container.appendChild(div);
+  });
+}
+
+function updateSelectionUi() { $("selectionBar").classList.toggle("show", selectedTags.size > 0); $("selectionCount").textContent = `바구니 선택 수량: ${selectedTags.size}개`; }
+async function copyMultipleText(sep) { if(selectedTags.size === 0) return; await systemCopy(Array.from(selectedTags).join(sep)); toast("🚀 조합형 멀티 복사 성공!"); }
+
+function systemCopy(text) {
+  try { return navigator.clipboard.writeText(text); } catch {
+    const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+  }
+}
+
+// ☁️ 무선 보안 우회형 원클릭 업로드 통신부
+async function uploadToGist() {
+  const token = localStorage.getItem("storage_token"); const gistId = localStorage.getItem("storage_gist");
+  if(!token || !gistId) return toast("⚠️ 설정을 저장한 뒤 진행하세요.");
+  toast("📡 원격 저장 장치 데이터 전송 중...");
   try {
     const res = await fetch(`https://api.github.com/gists/${gistId}`, {
       method: "PATCH",
       headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
       body: JSON.stringify({ files: { "tags_backup.json": { content: JSON.stringify(allTags, null, 2) } } })
     });
-    if (res.ok) toast("🚀 클라우드 업로드 성공!"); else toast("전송 실패: 열쇠 정보를 확인하세요.");
-  } catch { toast("네트워크 오류"); }
+    if(res.ok) toast("🚀 무선 클라우드 백업 동기화 완결!"); else toast("📡 전송 실패: 열쇠 인증 실패");
+  } catch { toast("❌ 통신 장애가 발생했습니다."); }
 }
 
-async function downloadFromCloud() {
-  const token = localStorage.getItem("local_cloud_token");
-  const gistId = localStorage.getItem("local_cloud_gist_id");
-  if (!token || !gistId) return toast("먼저 아래에 주소와 열쇠를 입력하고 저장해 주세요.");
-  toast("☁️ 클라우드 데이터 수신 중...");
+// ☁️ 무선 보안 우회형 원클릭 다운로드 수신부
+async function downloadFromGist() {
+  const token = localStorage.getItem("storage_token"); const gistId = localStorage.getItem("storage_gist");
+  if(!token || !gistId) return toast("⚠️ 설정을 저장한 뒤 진행하세요.");
+  toast("📡 원격 저장고 복원 데이터 수신 중...");
   try {
     const res = await fetch(`https://api.github.com/gists/${gistId}`, {
       method: "GET",
       headers: { "Authorization": `token ${token}`, "Cache-Control": "no-cache" }
     });
-    if (!res.ok) return toast("수신 실패: 정보를 확인하세요.");
-    const gistData = await res.json();
-    const textData = gistData.files["tags_backup.json"]?.content;
-    if (!textData || textData === "{}") return toast("공간이 비어있습니다. 먼저 업로드해 주세요.");
-    const data = JSON.parse(textData);
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    const store = tx.objectStore(STORE_NAME);
+    if(!res.ok) return toast("📡 수집 실패: 고유 식별키 오류");
+    const payload = await res.json();
+    const rawContent = payload.files["tags_backup.json"]?.content;
+    if(!rawContent || rawContent === "{}") return toast("ℹ️ 원격지가 비어있습니다. 업로드를 먼저 하세요.");
+    const data = JSON.parse(rawContent);
+    const tx = db.transaction(STORE_NAME, "readwrite"); const store = tx.objectStore(STORE_NAME);
     await new Promise(r => { const c = store.clear(); c.onsuccess = () => r(); });
-    for (const item of data) store.put(item);
-    await refreshAll(); toast("✅ 클라우드 동기화 완료!"); render();
-  } catch (e) { toast("불러오기 실패"); }
+    for(const i of data) store.put(i);
+    await refreshAll(); toast("✅ 원격지 복원 데이터 동기화 동기화 완결!"); render();
+  } catch { toast("❌ 다운로드 변환 처리 에러"); }
 }
 
-function initCategorySelects() {
-  const m = $("mainCategorySelect"); m.innerHTML = "";
-  Object.keys(CATEGORY_TREE).forEach(k => { const o = document.createElement("option"); o.value=k; o.textContent=k; m.appendChild(o); });
-  updateSubSelect();
-}
-
-function updateSubSelect() {
-  const s = $("subCategorySelect"); s.innerHTML = "";
-  (CATEGORY_TREE[activeMain]?.subs || ["전체"]).forEach(k => { const o = document.createElement("option"); o.value=k; o.textContent=k; s.appendChild(o); });
-  $("mainCategorySelectBtn").textContent = activeMain; $("subCategorySelectBtn").textContent = activeSub;
-}
-
-function openCategoryModal(type, context = null) {
-  let dropdown = $("inlineDropdown");
-  if (!dropdown) { dropdown = document.createElement("div"); dropdown.id = "inlineDropdown"; dropdown.className = "inlineDropdown"; }
-  modalPicker = type; editModalContext = context;
-  let btn = type === "searchMain" ? $("mainCategorySelectBtn") : $("subCategorySelectBtn");
-  btn.parentNode.insertBefore(dropdown, btn.nextSibling);
-  dropdown.innerHTML = "";
-  const list = type === "searchMain" ? Object.keys(CATEGORY_TREE) : CATEGORY_TREE[activeMain].subs;
-  list.forEach(name => {
-    const b = document.createElement("button"); b.className = "modalOptionBtn"; b.textContent = name;
-    b.onclick = () => {
-      if(type === "searchMain") { activeMain = name; activeSub = "전체"; updateSubSelect(); } else { activeSub = name; $("subCategorySelectBtn").textContent = name; }
-      dropdown.classList.remove("show"); render();
-    };
-    dropdown.appendChild(b);
-  });
-  requestAnimationFrame(() => dropdown.classList.add("show"));
-}
-
-function closeCategoryModal() { const d = $("inlineDropdown"); if(d) d.classList.remove("show"); }
-function normalizeTagText(t) { return String(t || "").replace(/_/g, " ").trim(); }
-
-async function addTag() {
-  const tag = normalizeTagText($("tagInput").value); if (!tag) return toast("태그 필수");
-  const item = { tag, kr:$("krInput").value, mainCategory:$("addMainCategoryBtn").textContent, subCategory:$("addSubCategoryBtn").textContent, desc:$("descInput").value, keywords:$("keywordsInput").value };
-  const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).put(item);
-  await refreshAll(); toast("저장 완료"); render();
-}
-
-async function bulkAdd() {
-  const text = $("bulkText").value.trim(); if (!text) return;
-  const tx = db.transaction(STORE_NAME, "readwrite"); const store = tx.objectStore(STORE_NAME);
-  text.split("\n").forEach(line => {
-    const parts = line.split(":"); if(parts.length < 2) return;
-    const tag = normalizeTagText(parts[0]); const kr = parts[1].replace(/[\(\)]/g, "").trim();
-    store.put({ tag, kr, mainCategory:"기타", subCategory:"기타", desc:"", keywords:"" });
-  });
-  await refreshAll(); toast("대량 저장 완료"); render();
-}
-
-function render() {
-  const q = $("searchInput").value.trim().toLowerCase();
-  const list = allTags.filter(t => {
-    const blob = `${t.tag} ${t.kr} ${t.desc}`.toLowerCase();
-    return (q ? blob.includes(q) : true) && (activeMain === "전체" || t.mainCategory === activeMain) && (activeSub === "전체" || t.subCategory === activeSub);
-  });
-  $("tagList").innerHTML = "";
-  list.slice(0, DISPLAY_LIMIT).forEach(t => {
-    const div = document.createElement("div"); div.className = "tag";
-    if(selectedTags.has(t.tag)) div.classList.add("selected");
-    div.innerHTML = `
-      <div class="tagName">${esc(t.kr || t.tag)} (${esc(t.tag)})</div>
-      <div class="tagDesc">${esc(t.desc || "설명 없음")}</div>
-      <div class="tagBtns">
-        <button class="copyBtn">복사</button>
-        <button class="selectBtn">${selectedTags.has(t.tag)?"✓":"＋"}</button>
-        <button class="del danger">삭제</button>
-      </div>
-    `;
-    div.querySelector(".copyBtn").onclick = () => { copyText(t.tag); toast(`복사됨: ${t.tag}`); };
-    div.querySelector(".selectBtn").onclick = () => { if(selectedTags.has(t.tag)) selectedTags.delete(t.tag); else selectedTags.add(t.tag); updateSelectionBar(); render(); };
-    div.querySelector(".del").onclick = async () => { if(!confirm("삭제?")) return; const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).delete(t.tag); await refreshAll(); render(); };
-    $("tagList").appendChild(div);
-  });
-}
-
-function updateSelectionBar() { $("selectionBar").classList.toggle("show", selectedTags.size > 0); $("selectionCount").textContent = `선택 ${selectedTags.size}개`; }
-async function copySelected(sep) { await copyText(Array.from(selectedTags).join(sep)); toast("모아 복사 완료"); }
-function clearSelected() { selectedTags.clear(); updateSelectionBar(); render(); }
-async function copyText(t) { try { await navigator.clipboard.writeText(t); } catch { const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); } }
-async function exportJson() { const blob = new Blob([JSON.stringify(allTags, null, 2)], { type:"application/json" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "backup.json"; a.click(); }
-function importJson(e) { const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = async () => { const data = JSON.parse(r.result); const tx = db.transaction(STORE_NAME, "readwrite"); const s = tx.objectStore(STORE_NAME); for(const i of data) s.put(i); await refreshAll(); render(); toast("복원 성공"); }; r.readAsText(f); }
-async function resetAll() { if(!confirm("전체 삭제?")) return; const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).clear(); allTags = []; render(); }
-function toast(m) { const e = $("toast"); e.textContent = m; e.classList.add("show"); setTimeout(() => e.classList.remove("show"), 1600); }
+function exportLocalJson() { const blob = new Blob([JSON.stringify(allTags, null, 2)], { type:"application/json" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "tag_backup.json"; a.click(); }
+async function resetLocalDatabase() { if(!confirm("정말 다 지우시겠습니까?")) return; const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).clear(); allTags = []; render(); toast("🗑️ 완벽히 초기화되었습니다."); }
+function toast(m) { const e = $("toast"); e.textContent = m; e.classList.add("show"); setTimeout(() => e.classList.remove("show"), 1800); }
 function esc(s) { return String(s || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
 </script>
 </body>
